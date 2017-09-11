@@ -92,7 +92,6 @@ class Starting_population(object):
         hybridlist = []
         molecule = Atoms()
         randfract = randint(0,100)
-        print randfract
         for i in atom_numbers:
             if len(molecule)!=0:
                 unstable = 1
