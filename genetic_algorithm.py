@@ -21,6 +21,9 @@ from time import time
 import platform
 from ase.visualize import view
 
+"""This program can be found on https://wiki.fysik.dtu.dk/ase/tutorials/ga/ga_optimize.html, modifications have been made by Nicholas Kellas to improve how the staring
+population is created."""
+
 print platform.node()
 
 db_file = 'gadb.db'
