@@ -4,7 +4,8 @@ from numpy import pi, sin, cos, sqrt, deg2rad, arccos, matrix, multiply, array, 
 from random import choice, randint
 
 class Starting_population(object):
-    """Generates an unrelaxed intelligent starting population"""
+    """Generates an unrelaxed intelligent starting population. Written by Nicholas Kellas with the support of Dr. Michael Groves, California State University, Fullerton,
+    The Blue waters Student Internship Program, and Shodor"""
 
     def __init__(self, atom_numbers, moleculegroup, cell):
         self.atom_numbers = atom_numbers
