@@ -22,7 +22,9 @@ import platform
 from ase.visualize import view
 
 """This program can be found on https://wiki.fysik.dtu.dk/ase/tutorials/ga/ga_optimize.html, modifications have been made by Nicholas Kellas to improve how the staring
-population is created."""
+population is created. The calculator used in this program, Dftb plus, does not come installed with ase and must be installed manually along with arpack. Most other
+calculators may be used instead and for production level work DFT is recommended. Dftb plus is a fast calculator but is known to be inaccurate, it was used to test
+the improvement in speed provided by alterations to the initial population phase of the GA and so accuracy was not required."""
 
 print platform.node()
 
