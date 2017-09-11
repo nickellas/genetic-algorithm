@@ -12,6 +12,9 @@ class Starting_population(object):
         self.cell = cell
 
     def __element_dict__(self, element, last_hyb):
+        """Assigns a molecular geometry to a placed atom. Each unit vector cooresponds to a generic position of a bonded atom. These are not intended to be the final
+        placements for the atoms but are close enough approximations to allow for efficient optimization. The unit vectors must be assigned for each element to be
+        tested. currently, only Hydrogen, Nitrogen, and Carbon, and the possible molecular geometries for them, are included."""
         ele_list = {6: ["tetrahedral","trigonal_planar","linear"],
                     7: ["trigonal_pyramidial", "bent", "s"],
                     1: ["s"]}
@@ -40,8 +43,8 @@ class Starting_population(object):
             print 'error detected'
         return bond_set
 
-    #Takes the basic geometry obtained in the geometry funtion and rotates the bonds to match the atom it is attached to.
     def __rotation__(self, hybridisation, vector, fracture):
+        """Takes the geometry obtained in the element_dict funtion and rotates the bonds to match the atom it is attached to."""
         hybridrot = []
         if hybridisation[0] == vector:
             for i in hybridisation:
@@ -81,6 +84,7 @@ class Starting_population(object):
 
     #Creates molecules to form an initial population for use in genetic algorithm.
     def randomizer(self):
+        """The meat and potatos of this program. randomizer takes in the stoichiometry provided and generates molecules."""
         atom_numbers = self.atom_numbers
         moleculegroup = self.moleculegroup
         cell = self.cell
