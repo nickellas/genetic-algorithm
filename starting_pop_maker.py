@@ -7,6 +7,13 @@ from random import choice
 from math import ceil
 import numpy as np
 
+"""This program allows for clustering of the initial population. The GA is programmed to create a candidate population of 500 molecules.
+Those molecules are then evaluated and sorted based on intermolecular distance. To run this program the clustering_v3 and comparators_opt
+Programs must be placed into the data directory of the ase package... or just remove the ase.data portions of there calls lines and keep
+those modules in this directory.
+
+This file and the two other files described above were created by Mathias S Jorgensen."""
+
 def pop_maker():
     data = read('candidates.traj@:')
     n_samples = len(data)
