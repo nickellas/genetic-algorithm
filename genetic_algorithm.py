@@ -21,16 +21,15 @@ from time import time
 import platform
 from ase.visualize import view
 
-"""This program can be found on https://wiki.fysik.dtu.dk/ase/tutorials/ga/ga_optimize.html, modifications have been made by Nicholas Kellas to improve how the staring
-population is created. The calculator used in this program, Dftb plus, does not come installed with ase and must be installed manually along with arpack. Most other
-calculators may be used instead and for production level work DFT is recommended. Dftb plus is a fast calculator but is known to be inaccurate, it was used to test
-the improvement in speed provided by alterations to the initial population phase of the GA and so accuracy was not required."""
-
-print platform.node()
+# This program can be found on https://wiki.fysik.dtu.dk/ase/tutorials/ga/ga_optimize.html, modifications have been made by 
+# Nicholas Kellas to improve how the staring population is created. The calculator used in this program, Dftb plus, does not come 
+# installed with ase and must be installed manually along with arpack. Most other calculators may be used instead and for production
+# level work DFT is recommended. Dftb plus is a fast calculator but is known to be inaccurate, it was used to test the improvement in 
+# speed provided by alterations to the initial population phase of the GA and so accuracy was not required.
 
 db_file = 'gadb.db'
 
-# create the surface
+# create the surface, In our testing we did not use a fixed surface but it was left in to allow quick addition if needed.
 slab = Atoms('', positions = np.zeros((0,3)), cell = [30., 30., 30.])
 slab.set_constraint(FixAtoms(mask=len(slab) * [True]))
 
@@ -45,8 +44,12 @@ v2 = cell[1, :] * 0.8
 v3 = cell[2, :]
 v3[2] = 3.
 
+# Input the stoichiometry to be analyzed here the first number is the amount of the element and the bracketed number is the atomic number
+# The stoichiometry below is for C9H7N
 atom_numbers = 9 * [6] + 7 * [1] + 1 * [7]
 
+# specifies how many molecules to generate for the initial population. This step is very fast so a large number is manageable if
+# clustering will be used.
 atcount = 500
 
 start = time()
@@ -55,26 +58,29 @@ ga = Starting_population(atom_numbers, moleculegroup, cell)
 ga.randomizer()
 while atcount > len(moleculegroup):
     ga.randomizer()
-#view(moleculegroup)
 
 write('candidates.traj', moleculegroup)
 end = time()
 print 'time to make candidate population', end-start
 
+# pop_maker takes in the traj file made above and from the 500 candidates identifies 20 that are significantly different to use in the GA
 start = time()
 starting_pop = pop_maker()
 end = time()
 print 'time to make starting population', end-start
 
+# creates the database file to hold the information generated
 d = PrepareDB(db_file_name=db_file,
               simulation_cell = slab,
               stoichiometry=atom_numbers)
 
+# The 20 molecules identified above become the starting population for the GA
 for i in starting_pop:
     d.add_unrelaxed_candidate(i)
 
+# n_to_test = the number of times the GA will generate a new molecule.
 population_size = len(starting_pop)
-mutation_probability = 0.0
+mutation_probability = 0.3
 n_to_test = 5000
 
 da = DataConnection('gadb.db')
@@ -97,6 +103,8 @@ mutations = OperationSelector([1., 1., 1.],
                                RattleMutation(blmin, n_to_optimize),
                                PermutationMutation(n_to_optimize)])
 
+# The starting population has its energy calculated and is optimized to a local minima or until it has tried for 100 iterations.
+# Dftb_plus and BFGS can be substituted for other calculators and optimizers.
 while da.get_number_of_unrelaxed_candidates() > 0:
     start_relax = time()
     a = da.get_an_unrelaxed_candidate()
@@ -150,7 +158,8 @@ for i in range(n_to_test):
     population.update()
     end_relax = time()
     print 'time to optimize:', end_relax-start_relax
-    if a3.get_potential_energy() < -557.783851467:
-        break
+    # used in testing to identify if the known global minima had been found (Quinoline)
+    #if a3.get_potential_energy() < -557.783851467:
+        #break
 
 write('all_candidates.traj', da.get_all_relaxed_candidates())
