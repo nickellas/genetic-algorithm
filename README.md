@@ -15,3 +15,22 @@ requirement to use this program:
   http://www.caam.rice.edu/software/ARPACK/
   
 NOTE: These instructions worked on my schools cluster but any number of changes may be needed for them to work of your architecture. Follow all readme files on these programs.
+
+___program guide___
+
+The programs in this directory are designed to work together when genetic_algorithm.py is run. They each do the following:
+
+genetic_algorithm.py (Nicholas Kellas)- The brains of the operation. To run, change the the stoichiometry desired (atom_numbers), a slab may be added if desired. The number of times the program will generate a new candidate is determined by n_to_test. By default the program
+will run 5000 iterations with a 30% chance to mutate the created molecule rather then just cut-and-splice.
+
+molemaker.py (Nicholas Kellas)- This module generate the molecules to form the initial population. It knows how to use Carbon, Hydrogen,
+and Nitrogen currently, but can easily have other elements added.
+
+Starting_pop_maker.py (Nicholas Kellas)- This program is a plug-in to use the two remaining programs to cluster the starting population.
+With it, a large starting population can be generated without hugely time consuming calculations, and then the molecules can be grouped
+based on intermolecular distances to create 20 distinct groups of molecules. A molecule is picked from each group at random to form the
+true starting population.
+
+clustering_v3.py (Mathias S Jorgensen)- Identifies similarity between molecules for grouping.
+
+comparators_opt.py (Mathias S Jorgensen)- Chunky math stuff used to make the clustering program work.
